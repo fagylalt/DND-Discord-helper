@@ -68,7 +68,6 @@ function determineDice(message, searchType){
     // if its zero, we search for how many rolls
     else if(searchType === 0){
         whatDice = message.indexOf('d');
-        console.log(whatDice);
         for (let index = 5; index < whatDice; index++) {
             diceType += message.charAt(index);
            
