@@ -12,25 +12,37 @@ client.once('ready', () => {
 client.on('message', message =>{
     const messageOutput = new Discord.MessageEmbed();
     if(message.content.charAt(0) === '!'){
-        let currentMessage = message.content;
+        let currentMessage = message.content.toLowerCase();
+        if(currentMessage.includes("roll")){
+        
         //if the input string is invalid, the server wont break, if the second part is incorrect, it goes through with NaN 
         try{
-            let getRoll = Roll(determineDice(currentMessage,1), determineDice(currentMessage, 0), currentMessage);
+            determineDice(currentMessage, 0);
+           let getRoll = Roll(determineDice(currentMessage,1), determineDice(currentMessage, 0), currentMessage);
             message.react(determineReact(getRoll.output,determineDice(currentMessage,1)));
             messageOutput.addFields(
             { name: 'Your total:' , value: getRoll.addedUp },
             { name: 'Individually:', value: getRoll.output},
         )
-        messageOutput.setTitle("Your roll " + "@" + message.author.tag.toString());
-        message.channel.send(messageOutput);
+            messageOutput.setTitle("Your roll " + "@" + message.author.tag.toString());
+            message.channel.send(messageOutput);
         }catch(e){
-            messageOutput.setColor('#FF0000')
-            messageOutput.setTitle("Error in input");
+            messageOutput.setColor('#FF0000');
+            messageOutput.setTitle("Roll like this: /Roll 1D6");
             message.channel.send(messageOutput);
         }
         
         
     }
+    if(currentMessage.includes("info")){
+        messageOutput.setColor('Green');
+        messageOutput.setTitle("Info");
+        messageOutput.addFields(
+        { name: 'Én vagyok az új robot' , value: "Beep, boop" }
+        )
+        message.channel.send(messageOutput);
+    }
+}
 });
 
 // if the player rolls the highest possible number, they get the happy emoji 
@@ -45,18 +57,21 @@ function determineReact(numbers, maxType){
 function determineDice(message, searchType){
     let diceType;
     let whatDice = message.indexOf('d')+1;
-    // ha 1, akkor a típust keressük
+    // if 1, we search for dice tpye
     if(searchType === 1){
         for (let index = whatDice; index <= message.length; index++) {
         
-            diceType += message.charAt(index)   
+            diceType += message.charAt(index)
+            
         }
     }
-    // ha más mint egy, akkor azt keressük, hányszor
-    else{
+    // if its zero, we search for how many rolls
+    else if(searchType === 0){
         whatDice = message.indexOf('d');
-        for (let index = 1; index < whatDice; index++) {
+        console.log(whatDice);
+        for (let index = 5; index < whatDice; index++) {
             diceType += message.charAt(index);
+           
             
         }
     }
