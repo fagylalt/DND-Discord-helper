@@ -13,15 +13,32 @@ client.on('message', message =>{
     const messageOutput = new Discord.MessageEmbed();
     if(message.content.charAt(0) === '!'){
         let currentMessage = message.content;
-        let getRoll = Roll(determineDice(currentMessage,1), determineDice(currentMessage, 0), currentMessage);
-        messageOutput.addFields(
+        try{
+            let getRoll = Roll(determineDice(currentMessage,1), determineDice(currentMessage, 0), currentMessage);
+            message.react(determineReact(getRoll.output,determineDice(currentMessage,1)));
+            messageOutput.addFields(
             { name: 'Your total:' , value: getRoll.addedUp },
             { name: 'Individually:', value: getRoll.output},
         )
         messageOutput.setTitle("Your roll " + "@" + message.author.tag.toString());
         message.channel.send(messageOutput);
+        }catch(e){
+            messageOutput.setColor('#FF0000')
+            messageOutput.setTitle("Error in input");
+            message.channel.send(messageOutput);
+        }
+        
+        
     }
 });
+function determineReact(numbers, maxType){
+    let returnArray;
+ if(numbers.indexOf(maxType) != -1){
+     return '😊' ;
+ }else{
+     return '🤐'
+ }
+}
 function determineDice(message, searchType){
     let diceType;
     let whatDice = message.indexOf('d')+1;
@@ -50,11 +67,13 @@ function Roll(diceType, howManyTimes, currentMessage) {
     let addedUp = 0;
     let returnArray;
     let bonusPoint = "";
+    // if theres a positive multiplier
     if(currentMessage.indexOf('+') > 0){
         for (let index = currentMessage.indexOf('+')+1; index < currentMessage.length; index++){
             bonusPoint += currentMessage[index];
            
         }
+    // if there is a negative multiplier
     }else if(currentMessage.indexOf('-') > 0){
         for (let index = currentMessage.indexOf('+')+1; index < currentMessage.length; index++){
             bonusPoint +=  currentMessage[index];
