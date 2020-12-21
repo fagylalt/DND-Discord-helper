@@ -92,8 +92,9 @@ function Roll(diceType, howManyTimes, currentMessage) {
     for (let index = 0; index < howManyTimes; index++) {
      let whatDidWeRoll = Math.floor(Math.random()*diceType) +1;
      output +=whatDidWeRoll+" ";
-     addedUp += whatDidWeRoll + bonusPoint;
+     addedUp += whatDidWeRoll;
     }
+    addedUp += bonusPoint;
     returnArray = {output, addedUp, bonusPoint};
     return returnArray;
     
