@@ -13,6 +13,7 @@ client.on('message', message =>{
     const messageOutput = new Discord.MessageEmbed();
     if(message.content.charAt(0) === '!'){
         let currentMessage = message.content;
+        //if the input string is invalid, the server wont break, if the second part is incorrect, it goes through with NaN 
         try{
             let getRoll = Roll(determineDice(currentMessage,1), determineDice(currentMessage, 0), currentMessage);
             message.react(determineReact(getRoll.output,determineDice(currentMessage,1)));
@@ -31,6 +32,8 @@ client.on('message', message =>{
         
     }
 });
+
+// if the player rolls the highest possible number, they get the happy emoji 
 function determineReact(numbers, maxType){
     let returnArray;
  if(numbers.indexOf(maxType) != -1){
@@ -85,6 +88,7 @@ function Roll(diceType, howManyTimes, currentMessage) {
     }else{
         bonusPoint = parseInt(bonusPoint);
     }
+    //calculating the rolls
     for (let index = 0; index < howManyTimes; index++) {
      let whatDidWeRoll = Math.floor(Math.random()*diceType) +1;
      output +=whatDidWeRoll+" ";
