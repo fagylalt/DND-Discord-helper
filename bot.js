@@ -42,6 +42,13 @@ client.on('message', message =>{
         )
         message.channel.send(messageOutput);
     }
+    if(currentMessage.includes('derbin')){
+        messageOutput.setColor('Green');
+        messageOutput.setTitle('Azt még megeszed?')
+        messageOutput.setImage('https://cdn.discordapp.com/attachments/729430760041349240/790693800266694666/derb.gif');
+        message.channel.send(messageOutput);
+        
+    }
 }
 });
 
@@ -109,6 +116,9 @@ function Roll(diceType, howManyTimes, currentMessage) {
      addedUp += whatDidWeRoll;
     }
     addedUp += bonusPoint;
+    if(output.length > 1023){
+        output = "Cheeky bastard";
+    }
     returnArray = {output, addedUp, bonusPoint};
     return returnArray;
     
